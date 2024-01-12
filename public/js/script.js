@@ -6,6 +6,10 @@ const joinBtn = document.getElementById('joinBtn');
 const userVideo = document.getElementById('userVideo');
 const peerVideo = document.getElementById('peerVideo');
 
+const muteBtn = document.getElementById('muteBtn');
+const hideBtn = document.getElementById('hideBtn');
+const leaveBtn = document.getElementById('leaveBtn');
+
 navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
 var creator = false;
 var roomName = '';
@@ -17,7 +21,7 @@ var iceServers = {
     ]
 };
 var userStream = null;
-
+var muteFlag = true;
 
 joinBtn.addEventListener('click', function(){
     if(roomInput.value == ''){
@@ -27,6 +31,36 @@ joinBtn.addEventListener('click', function(){
         socket.emit('join', roomInput.value);        
     }
 });
+
+muteBtn.addEventListener('click', function(){
+    if(muteFlag){
+        muteBtn.textContent = 'Unmute';
+        muteFlag = !muteFlag;
+        userStream.getTracks()[0].enabled = muteFlag;
+    }else{
+        muteBtn.textContent = 'Mute';
+        muteFlag = !muteFlag;
+        userStream.getTracks()[0].enabled = muteFlag;
+    }
+});
+var hideFlag = true;
+hideBtn.addEventListener('click', function(){
+    if(hideFlag){
+        hideBtn.textContent = 'Show';
+        hideFlag = !hideFlag;
+        userStream.getTracks()[1].enabled = hideFlag;
+    }else{
+        hideBtn.textContent = 'Hide';
+        hideFlag = !hideFlag;
+        userStream.getTracks()[1].enabled = hideFlag;
+    }
+});
+
+
+
+
+
+
 
 socket.on('created', function(){
     creator = true;
